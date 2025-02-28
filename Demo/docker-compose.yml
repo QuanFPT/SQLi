@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./ERROR_BASED
+    ports:
+      - "83:80"
+    volumes:
+      - ./ERROR_BASED:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sqli_demo
+      MYSQL_USER: demo
+      MYSQL_PASSWORD: demopassword
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3308:3306"

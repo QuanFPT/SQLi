@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    ports:
+      - "86:80"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=sqli_lab
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - sqli_network
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      - POSTGRES_DB=sqli_lab
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sqli_network
+
+volumes:
+  postgres_data:
+
+networks:
+  sqli_network:
+    driver: bridge

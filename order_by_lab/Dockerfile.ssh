@@ -1,0 +1,29 @@
+# Sử dụng image Ubuntu làm nền tảng
+FROM ubuntu:latest
+
+# Cập nhật và cài đặt các gói cần thiết
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Tạo thư mục cho SSH
+RUN mkdir /var/run/sshd
+
+# Thêm người dùng root và admin, cùng với mật khẩu của họ
+RUN echo 'root:Abcd@1234' | chpasswd
+RUN useradd -m admin && echo 'admin:Admin123' | chpasswd
+
+# Tạo các file flag
+RUN echo "ESS_CYBER{Ch4ng3_y0ur_r0l3_t0_R00t_f0r_els3}" > /home/admin/flag_user.txt
+RUN echo "ESS_CYBER{D0_y0u_kn0w_th4t_sqli_c4n_Lead_t0_RCE}" > /root/flag_root.txt
+
+# Cấu hình quyền truy cập file
+RUN chown admin:admin /home/admin/flag_user.txt && chmod 600 /home/admin/flag_user.txt
+RUN chown root:root /root/flag_root.txt && chmod 600 /root/flag_root.txt
+
+# Mở cổng SSH
+EXPOSE 22
+
+# Khởi động dịch vụ SSH khi container bắt đầu
+CMD ["/usr/sbin/sshd", "-D"]

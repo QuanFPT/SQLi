@@ -1,0 +1,35 @@
+# docker-compose.yml
+version: '3'
+services:
+  ssh-ctf:
+    build:
+      context: .
+      dockerfile: Dockerfile.ssh
+    ports:
+      - "2222:22"
+    container_name: ssh-ctf-lab
+    volumes:
+      - ./data:/data
+    stdin_open: true
+    tty: true
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ess_store
+      MYSQL_USER: store_user
+      MYSQL_PASSWORD: store_password
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  

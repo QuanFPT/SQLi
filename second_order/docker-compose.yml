@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: second_order_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    ports:
+      - "3307:3306"
+
+  php:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    container_name: second_order_php
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "85:80"
+    depends_on:
+      - db
